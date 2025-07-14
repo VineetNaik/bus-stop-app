@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,3 +109,116 @@
 </body>
 
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live TfL Bus Times</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h1>Bus times (towards central)</h1>
+  <table id="arrivals1">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 60%;">
+      <col style="width: 20%;">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Bus</th>
+        <th>Destination</th>
+        <th>Arriving in</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="3">Loading...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h1>Bus times (southbound)</h1>
+  <table id="arrivals2">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 60%;">
+      <col style="width: 20%;">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Bus</th>
+        <th>Destination</th>
+        <th>Arriving in</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="3">Loading...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const apiKey = "2d033d1af7b148bda1fbd9860f6f7ba6";
+
+    function fetchArrivals(stopID, listID) {
+      const list = document.getElementById(listID);
+
+      fetch(`https://api.tfl.gov.uk/StopPoint/${stopID}/Arrivals`, {
+        headers: {
+          "api_key": apiKey
+        }
+      })
+
+        .then(response => response.json())
+        .then(data => {
+          const tbody = list.querySelector("tbody");
+          tbody.innerHTML = ""; // Clear "Loading..."
+
+          if (data.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='3'>No upcoming buses.</td></tr>";
+            return;
+          }
+
+          const sorted = data.sort((a, b) => a.timeToStation - b.timeToStation);
+
+          for (let arrival of sorted) {
+            const newRow = document.createElement('tr')
+
+            const lineNameTableElement = document.createElement('td');
+            lineNameTableElement.textContent = `${arrival.lineName}`;
+
+            const destinationNameTableElement = document.createElement('td');
+            destinationNameTableElement.textContent = `${arrival.destinationName}`;
+
+            const timeToStationTableElement = document.createElement('td');
+            timeToStationTableElement.textContent = `${Math.round(arrival.timeToStation / 60)} min`;
+
+            newRow.appendChild(lineNameTableElement);
+            newRow.appendChild(destinationNameTableElement);
+            newRow.appendChild(timeToStationTableElement);
+
+            tbody.appendChild(newRow);
+          }
+        })
+        .catch(err => {
+          document.getElementById(listID).innerHTML = "Error fetching bus data.";
+          console.error(err);
+        });
+    }
+    fetchArrivals("490004404N", "arrivals1");
+    fetchArrivals("490004404S", "arrivals2");
+  </script>
+
+
+
+</body>
+
+</html>
+>>>>>>> master
