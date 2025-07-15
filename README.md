@@ -1,4 +1,4 @@
-# My Tfl Bus App
+# TfL bus stop app
 
 In preparation for my – hopefully – upcoming studies, I have been trying to program regularly, and learn and develop some new skills so that I don’t go into the course entirely cold.
 Because I wanted to build something that was actually useful, I decided to create a simple site that effectively shows me the digital bus timetables for the two stops nearest my apartment. This idea seems to be a strong one, as it would be something I could actually use daily and is something that could potentially be built relatively quickly using commonplace techniques. It would also be quite easy to build upon the basics to create a more sophisticated website with greater functionality.
@@ -47,5 +47,42 @@ Push to GitHub – here you define which branch you want to push to, and then ac
 
 ```
 $ git branch -M main
+$ git push origin main
+```
+
+## Creating a new branch for new features
+
+I'll check first that I am on the main branch, and that it is up to date:
+
+```
+$ git checkout main
+$ git pull origin main
+```
+
+Creating a new branch for new features:
+
+```
+$ git checkout -b new-features
+```
+
+Once changes are made, add and commit as usual
+
+```
+$ git add .
+$ git commit -m "Added new tab"
+```
+
+Push the new branch into GitHub - only now will you see the new branch. This will not affect main
+
+```
+$ git push -u origin new-features
+```
+
+Once you wish to merge into main:
+
+```
+$ git checkout main
+$ git pull origin main
+$ git merge new-features
 $ git push origin main
 ```

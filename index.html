@@ -12,47 +12,159 @@
 <!-- body contains two tables, with some formatting included -->
 
 <body>
-  <h1>Bus times (towards central)</h1>
-  <table id="arrivals1">
-    <colgroup>
-      <col style="width: 15%;">
-      <col style="width: 60%;">
-      <col style="width: 25%;">
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Bus</th>
-        <th>Destination</th>
-        <th>Arriving in</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="3">Loading...</td>
-      </tr>
-    </tbody>
-  </table>
 
-  <h1>Bus times (southbound)</h1>
-  <table id="arrivals2">
-    <colgroup>
-      <col style="width: 15%;">
-      <col style="width: 60%;">
-      <col style="width: 25%;">
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Bus</th>
-        <th>Destination</th>
-        <th>Arriving in</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="3">Loading...</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'geolocation')" id="defaultOpen">Nearest stop</button>
+    <button class="tablinks" onclick="openTab(event, 'mystops')">Vineet's flat</button>
+  </div>
+
+  <div id="mystops" class="tabcontent">
+    <h1>Bus times (towards central)</h1>
+    <table id="arrivals1">
+      <colgroup>
+        <col style="width: 15%;">
+        <col style="width: 60%;">
+        <col style="width: 25%;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Bus</th>
+          <th>Destination</th>
+          <th>Arriving in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="3">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h1>Bus times (southbound)</h1>
+    <table id="arrivals2">
+      <colgroup>
+        <col style="width: 15%;">
+        <col style="width: 60%;">
+        <col style="width: 25%;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Bus</th>
+          <th>Destination</th>
+          <th>Arriving in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="3">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="geolocation" class="tabcontent">
+    <h1 id="nearestName">Loading stop info... </h1>
+    <table id="arrivals3">
+      <colgroup>
+        <col style="width: 15%;">
+        <col style="width: 60%;">
+        <col style="width: 25%;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Bus</th>
+          <th>Destination</th>
+          <th>Arriving in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="3">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+
+  <!-- Script to allow toggling between tabs -->
+  <script>
+    function openTab(evt, tabName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
+
+  <!-- Get the element with id="defaultOpen" and click on it-->
+  <script>
+    document.getElementById("defaultOpen").click();
+  </script>
+
+
+  <!-- Find geolocation -->
+  <script>
+    navigator.geolocation.getCurrentPosition(success, error);
+    function success(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      fetchNearestStop(lat, lon);
+    }
+
+    function error() {
+      alert("Unable to retrieve your location");
+    }
+  </script>
+
+
+  <!-- Find nearest bus stop -->
+  <script>
+    function fetchNearestStop(lat, lon) {
+      const radius = 500; // in metres
+      const url = `https://api.tfl.gov.uk/StopPoint?lat=${lat}&lon=${lon}&stopTypes=NaptanPublicBusCoachTram&radius=${radius}&modes=bus`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.stopPoints.length === 0) {
+            console.log("No bus stops found nearby.");
+            return;
+          }
+
+          // Sort by distance to find the closest
+          const nearest = data.stopPoints.sort((a, b) => a.distance - b.distance)[0];
+
+          console.log("Nearest Stop ID:", nearest.id);
+          console.log("Stop Name:", nearest.commonName);
+          console.log("Indicator:", nearest.indicator);
+
+          // Update heading
+
+          document.getElementById("nearestName").textContent = `Bus times from: ${nearest.commonName} (${nearest.indicator.replace(/[^a-zA-Z]+/g, '')})`;
+
+          // Call arrivals function
+          fetchArrivals(nearest.id, "arrivals3");
+        })
+        .catch(err => console.error("Error fetching stop points:", err));
+    }
+  </script>
+
 
   <!-- JavaScript to pull the data and sort it in the appropriate manner, and add to the table -->
 
@@ -118,12 +230,10 @@
         });
     }
 
-    //use function on two relevant bus stops
+    //use function on three relevant bus stops
     fetchArrivals("490004404N", "arrivals1");
     fetchArrivals("490004404S", "arrivals2");
   </script>
-
-
 
 </body>
 
