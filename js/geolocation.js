@@ -3,7 +3,7 @@ navigator.geolocation.getCurrentPosition(success, error);
 function success(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
-    fetchNearestStop(lat, lon);
+    showNearestStops(lat, lon);
 }
 
 function error() {
@@ -12,8 +12,8 @@ function error() {
 
 
 // Find nearest bus stop
-function fetchNearestStop(lat, lon) {
-    const radius = 100; // in metres
+function showNearestStops(lat, lon) {
+    const radius = 500;
     const url = `https://api.tfl.gov.uk/StopPoint?lat=${lat}&lon=${lon}&stopTypes=NaptanPublicBusCoachTram&radius=${radius}&modes=bus`;
 
     fetch(url)
@@ -25,18 +25,47 @@ function fetchNearestStop(lat, lon) {
             }
 
             // Sort by distance to find the closest
-            const nearest = data.stopPoints.sort((a, b) => a.distance - b.distance)[0];
+            const stops = data.stopPoints
+                .sort((a, b) => a.distance - b.distance)
+                .slice(0, 5);
 
-            console.log("Nearest Stop ID:", nearest.id);
-            console.log("Stop Name:", nearest.commonName);
-            console.log("Indicator:", nearest.indicator);
+            const container = document.getElementById("drop1");
+            container.innerHTML = '';
 
-            // Update heading
+            //create default option
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = "Select a stop";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            container.appendChild(defaultOption);
 
-            document.getElementById("nearestName").textContent = `Bus times from: ${nearest.commonName} (Stop ${nearest.indicator.replace(/[^a-zA-Z]+/g, '')})`;
+            //create option elements
+            stops.forEach(stop => {
+                let stopIndicator = stop.indicator.replace(/[^a-zA-Z ]+/g, '');
+                if (!stopIndicator.includes("Stop")) {
+                    stopIndicator = "Stop " + stopIndicator;
+                }
 
-            // Call arrivals function
-            fetchArrivals(nearest.id, "arrivals3");
+                const option = document.createElement('option');
+                option.textContent = `${stop.commonName} (${stopIndicator})`;
+                option.value = stop.naptanId;
+                option.setAttribute('data-indicator', stop.indicator);
+                container.appendChild(option);
+            });
+
+            //add event listener to <select> dropdown
+            container.onchange = function () {
+                const selectedOption = container.options[container.selectedIndex];
+                const stopName = selectedOption.textContent;
+                const stopId = selectedOption.value;
+                
+                document.getElementById('stop-name').textContent = `Bus times from: ${stopName}`;
+
+                // Call arrivals function
+                fetchArrivals(stopId, 'arrivals3');
+            };
         })
+
         .catch(err => console.error("Error fetching stop points:", err));
+
 }

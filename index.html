@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Live TfL Bus Times</title>
+  <title>TfL bus times near you</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
 <body>
 
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'geolocation')" id="defaultOpen">Nearest stop</button>
+    <button class="tablinks" onclick="openTab(event, 'geolocation')" id="defaultOpen">Stops near me</button>
     <button class="tablinks" onclick="openTab(event, 'mystops')">Vineet's flat</button>
   </div>
 
@@ -64,7 +64,10 @@
   </div>
 
   <div id="geolocation" class="tabcontent">
-    <h1 id="nearestName">Loading stop info... </h1>
+    <select name="" id="drop1"></select>
+    <h1 id="stop-name">Please select a stop from the dropdown... </h1>
+    
+
     <table id="arrivals3">
       <colgroup>
         <col style="width: 15%;">
@@ -85,13 +88,11 @@
       </tbody>
     </table>
   </div>
-  </div>
-
 
   <script src="js/navigation.js"></script>
   <script src="js/geolocation.js"></script>
   <script src="js/fetchArrivals.js"></script>
-  
+
 </body>
 
 </html>
