@@ -13,13 +13,18 @@
 
 <body>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'geolocation')" id="defaultOpen">Stops near me</button>
-    <button class="tablinks" onclick="openTab(event, 'mystops')">Vineet's flat</button>
+<h1 class="title">TfL Bus Timetable</h1>
+
+  <div class="button-row">
+    <div class="left-buttons">
+      <button class="tablinks" onclick="openTab(event, 'geolocation')" id="defaultOpen">Stops near me</button>
+      <button class="tablinks" onclick="openTab(event, 'mystops')">Vineet's flat</button>
+    </div>
+    <button class="refresh" id="refresh-button">Refresh</button>
   </div>
 
   <div id="mystops" class="tabcontent">
-    <h1>Bus times (towards central)</h1>
+    <h2>Bus times (towards central)</h2>
     <table id="arrivals1">
       <colgroup>
         <col style="width: 15%;">
@@ -41,7 +46,7 @@
     </table>
 
 
-    <h1>Bus times (southbound)</h1>
+    <h2>Bus times (southbound)</h2>
     <table id="arrivals2">
       <colgroup>
         <col style="width: 15%;">
@@ -65,8 +70,8 @@
 
   <div id="geolocation" class="tabcontent">
     <select name="" id="drop1"></select>
-    <h1 id="stop-name">Please select a stop from the dropdown... </h1>
-    
+    <h2 id="stop-name">Please select a stop from the dropdown... </h2>
+
 
     <table id="arrivals3">
       <colgroup>
@@ -88,6 +93,8 @@
       </tbody>
     </table>
   </div>
+
+  <h3 class="footnote" id="time-update">Last updated at: </h3>
 
   <script src="js/navigation.js"></script>
   <script src="js/geolocation.js"></script>

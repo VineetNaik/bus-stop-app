@@ -63,6 +63,7 @@ function showNearestStops(lat, lon) {
 
                 // Call arrivals function
                 fetchArrivals(stopId, 'arrivals3');
+                
             };
         })
 

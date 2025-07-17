@@ -1,6 +1,5 @@
 // Script to allow toggling between tabs 
 function openTab(evt, tabName) {
-    // Declare all variables
     var i, tabcontent, tablinks;
 
     // Get all elements with class="tabcontent" and hide them
@@ -23,3 +22,25 @@ function openTab(evt, tabName) {
 
 //Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+
+//function to refresh
+function refreshArrivals() {
+    fetchArrivals("490004404N", "arrivals1");
+    fetchArrivals("490004404S", "arrivals2");
+
+    document.getElementById("time-update").textContent = "Last updated at: " + new Date().toLocaleTimeString();
+    
+    const container = document.getElementById("drop1");
+    const selectedOption = container.options[container.selectedIndex];
+    if (selectedOption && selectedOption.value) {
+        fetchArrivals(selectedOption.value, "arrivals3");
+    }
+
+
+}
+
+//run on click button
+document.getElementById('refresh-button').addEventListener("click", refreshArrivals);
+
+//run on window opening
+window.addEventListener("DOMContentLoaded", refreshArrivals)
