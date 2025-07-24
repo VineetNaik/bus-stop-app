@@ -86,3 +86,37 @@ $ git pull origin main
 $ git merge new-features
 $ git push origin main
 ```
+
+## Cloning and getting back into workflow
+
+Navigate to the folder where the project is 
+
+```
+cd path/to/your/project_folder
+```
+
+Check that Git is already initialised and has a remote
+
+```
+$ git remote -v
+```
+
+and if not, run a re-link
+
+```
+$ git remote add origin https://github.com/username/project-repo.git
+```
+
+Check the status of the local repo (to see if there are any uncommitted changes)
+
+```
+$ git status
+```
+
+Ensure that you're synced with the remote ```main``` branch
+
+```
+$ git pull origin main
+```
+
+Then stage and commit changes with the usual ```add, comit, push``` sequence.
