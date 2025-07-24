@@ -13,7 +13,12 @@ This project involved the use of HTML, CSS, JavaScript to create the website its
 - JavaScript script that makes the API call, gets the data and sorts it, and then creates the table elements and adds it to the relevant table.
 - CSS formatting file that gets the iconic TfL font, and formats the table/colours across the site.
 
-## Note to self: using Git
+## v2
+
+- Added a "stops near me" feature which gets the user's location, finds stops within a 500m radius, sorts the stops by nearest to furthest, and provides options for the user to select from the 5 nearest stops. 
+- Added a "Refresh" button feature which updates the buses and lets the user know when the page was last refreshed. 
+
+# Note to self: using Git
 
 While GitHub can be used entirely through the web-interface, most developers prefer using Git command line interface in order to commit code to codebases hosted on GitHub, as it provides more control.
 
