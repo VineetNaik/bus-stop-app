@@ -119,4 +119,4 @@ Ensure that you're synced with the remote ```main``` branch
 $ git pull origin main
 ```
 
-Then stage and commit changes with the usual ```add, comit, push``` sequence.
+Then stage and commit changes with the usual ```add```, ```commit```, ```push``` sequence.
